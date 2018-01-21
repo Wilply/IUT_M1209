@@ -39,11 +39,11 @@ def register(vprenom,vnom,vbirthday,vsexe):
                      #   0  , 1 ,    2   ,  3
                      #prenom,nom,birthfay,sexe
 #Ajout de personne pour les tests, a commenter plus tard.
-three.append(register("Elizabeth",'Royal',"19260421","F"))
-three.append(register("Charles",'Royal',"19481114","H"))
-three.append(register("Diana",'Royal',"19610701","F"))
-three.append(register("Harry",'Royal',"19840915","H",))
-three.append(register("William",'Royal',"19820621","H"))
+three.append(register("elizabeth",'Royal',"19260421","F"))
+three.append(register("charles",'Royal',"19481114","H"))
+three.append(register("diana",'Royal',"19610701","F"))
+three.append(register("harry",'Royal',"19840915","H",))
+three.append(register("william",'Royal',"19820621","H"))
 
 
 #print(three)
@@ -65,9 +65,10 @@ def displaybisbis(ls,three=three): #afficher les personne correspondant id conte
     for j in range(0,len(ls)):
         for k in ls[j]:
             i = int(k)
-            print(three[i][0]," ",three[i][1]," ",three[i][2][6:8],"/",three[i][2][3:5],"/",three[i][2][:4]," ",three[i][3],sep='')
+            print(printer.format(three[i][0],three[i][1],three[i][2][6:8],three[i][2][3:5],three[i][2][:4],three[i][3],))
+            #print(three[i][0]," ",three[i][1]," ",three[i][2][6:8],"/",three[i][2][3:5],"/",three[i][2][:4]," ",three[i][3],sep='')
 
-def getIdbis(vprenom,ls): #renvoie l'id du prenom entré(obsolette)
+def getId_OLD(vprenom,ls): #renvoie l'id du prenom entré OLD ==> getId
     control = 0         # à n'utiliser que si l'orthographe du nom entrer est exact
     vindex = ''
     for i in range(0,len(ls)):
@@ -175,7 +176,37 @@ def ascendant(parent,ls=parente):#renvoie une liste avec TOUT les ascendant
 
 #print(ascendant(3))
 
-''' #pas utile, la fonction lien de parent suffit
+def simplew(word):
+    return unicodedata.normalize('NFD', word).encode('ascii','ignore').decode().lower()
+
+#print(simplew('Roél'))
+
+def sortbyname(lsid,three=three): #tri par prenom puis par nom, pour trier par nom puis par prenom
+    ordered = []                                               #inverser les 0 et les 1
+    ordered.append(lsid[0])
+    for i in range(0,len(lsid)):
+        ctl = 0
+        while ctl <= len(ordered):
+            if simplew(three[lsid[i]][0]) < simplew(three[ordered[ctl]][0]):
+                ordered.insert(ctl,lsid[i])
+                ctl = len(ordered) + 2
+            elif simplew(three[lsid[i]][0]) == simplew(three[ordered[ctl]][0]):
+                if simplew(three[lsid[i]][1]) < simplew(three[ordered[ctl]][1]):
+                    ordered.insert(ctl,lsid[i])
+                elif simplew(three[lsid[i]][1]) > simplew(three[ordered[ctl]][1]):
+                    ordered.insert(ctl+1,lsid[i])
+                ctl = len(ordered) + 2
+            elif simplew(three[lsid[i]][0]) > simplew(three[ordered[-1]][0]):
+                ordered.append(lsid[i])
+                ctl = len(ordered) + 2
+            else :
+                ctl += 1
+    return ordered
+
+#print(test([3,2,0,4,1]))
+
+'''
+#pas utile, la fonction lien de parent suffit
 def enfant(parent,enfant,ls): #attribu un enfant a un parent; enfant & parent sont des id
     ls[parent][5].append(enfant)
 
@@ -183,6 +214,7 @@ print(three[2])
 enfant(2,3,three)
 print(three[2])
 '''
+
 def whosyourchildreen(parent,ls=parente): #renvoir l'id des parents dans une liste
     childreensid = []
     for i in range(0,len(ls)):
@@ -208,6 +240,8 @@ def descendant(parent,ls=parente):#renvoie une liste avec TOUT les descendant
             loop = 1
     return descendanttab
 
+#print(descendant(0))
+
 def desfreresetdessoeurs(personne,ls=parente):
     parent = []
     freresoeur = []
@@ -223,12 +257,10 @@ def desfreresetdessoeurs(personne,ls=parente):
                         freresoeur.append(ls[i][1])
     freresoeur = list(set(freresoeur)) #de base set renvoie un dictionnaire, supprime les doublon
     return freresoeur
+
 #print(desfreresetdessoeurs(3))
 
-
-#print(descendant(0))
-
-def sortbyname(lsid,three=three):
+def sortbyname_OLD(lsid,three=three): #ancienne fonction ==> sortbyname fait à la main
     lsinfo = []
     for i in range(0,len(lsid)):
         lsinfo.append(three[lsid[i]])
@@ -237,7 +269,7 @@ def sortbyname(lsid,three=three):
 
 #display(sortbyname([3,2,0,4,1]))
 
-def sortbydate(lsid,three=three):
+def sortbydate_OLD(lsid,three=three):
     lsinfo = []
     for i in range(0,len(lsid)):
         lsinfo.append(three[lsid[i]])
@@ -530,7 +562,7 @@ def main(three=three):
                 nbrpersls.append(i)
             print("Voici toute les personne de l'arbre par ordre de nom")
             print('')
-            display(sortbyname(nbrpersls))
+            displaybis(sortbyname(nbrpersls))
             os.system("sleep 2")
             print('')
             print("Pour revenir au menu pricipale taper [Q]")

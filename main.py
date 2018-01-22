@@ -205,6 +205,23 @@ def sortbyname(lsid,three=three): #tri par prenom puis par nom, pour trier par n
 
 #print(test([3,2,0,4,1]))
 
+def sortbydate(lsid,three=three): #fonction pout trier par ordre de date de naissance
+    ordered = []
+    ordered.append(lsid[0])
+    for i in range(1,len(lsid)):
+        j = 0
+        while j < len(ordered):
+            if int(three[lsid[i]][2]) < int(three[ordered[j]][2]):
+                ordered.insert(j,lsid[i])
+                j = len(ordered) + 2
+            elif int(three[lsid[i]][2]) > int(three[ordered[-1]][2]):
+                ordered.append(lsid[i])
+                j = len(ordered) + 2
+            else :
+                j = j + 1
+    return ordered
+#print(sortbydate([3,2,0,4,1]))
+
 '''
 #pas utile, la fonction lien de parent suffit
 def enfant(parent,enfant,ls): #attribu un enfant a un parent; enfant & parent sont des id
@@ -255,12 +272,12 @@ def desfreresetdessoeurs(personne,ls=parente):
             for i in range(0,len(ls)):
                 if(parent[j] == ls[i][0]) and (ls[i][1] != personne):
                         freresoeur.append(ls[i][1])
-    freresoeur = list(set(freresoeur)) #de base set renvoie un dictionnaire, supprime les doublon
+    freresoeur = list(set(freresoeur)) #de base set renvoie un dictionnaire,convertis en liste et supprime les doublon
     return freresoeur
 
 #print(desfreresetdessoeurs(3))
 
-def sortbyname_OLD(lsid,three=three): #ancienne fonction ==> sortbyname fait à la main
+def sortbyname_OLD(lsid,three=three): #ancienne fonction qui utilise sorted ==> sortbyname fait à la main
     lsinfo = []
     for i in range(0,len(lsid)):
         lsinfo.append(three[lsid[i]])
@@ -269,7 +286,7 @@ def sortbyname_OLD(lsid,three=three): #ancienne fonction ==> sortbyname fait à 
 
 #display(sortbyname([3,2,0,4,1]))
 
-def sortbydate_OLD(lsid,three=three):
+def sortbydate_OLD(lsid,three=three): #ancienne fonction qui utilise sorted ==> sortbydate fait à la main
     lsinfo = []
     for i in range(0,len(lsid)):
         lsinfo.append(three[lsid[i]])
@@ -582,7 +599,7 @@ def main(three=three):
                 nbrpersls.append(i)
             print("Voici toute les personne de l'arbre par ordre de date de naissance")
             print('')
-            display(sortbydate(nbrpersls))
+            displaybis(sortbydate(nbrpersls))
             os.system("sleep 2")
             print('')
             print("Pour revenir au menu pricipale taper [Q]")

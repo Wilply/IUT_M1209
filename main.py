@@ -48,6 +48,8 @@ three.append(register("william",'Royal',"19820621","H"))
 
 #print(three)
 
+#Bon on va essayer de faire un arbre...
+
 def display(ls=three): #afficher toute la liste proprement
     printer = "{:<10} {:<10} {:<2}/{:<2}/{:<4} {:>3}"
     for i in range(0,len(ls)):
